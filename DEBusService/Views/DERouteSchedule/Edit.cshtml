@@ -18,7 +18,7 @@
         @Html.HiddenFor(model => model.routeScheduleId)
 
         <div class="form-group">
-            @Html.LabelFor(model => model.busRouteCode, "busRouteCode", htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.busRouteCode, "Bus Route", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.DropDownList("busRouteCode", null, htmlAttributes: new { @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.busRouteCode, "", new { @class = "text-danger" })
@@ -26,7 +26,7 @@
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.startTime, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.startTime, "Start Time", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.EditorFor(model => model.startTime, new { htmlAttributes = new { @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.startTime, "", new { @class = "text-danger" })
@@ -34,7 +34,7 @@
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.isWeekDay, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.isWeekDay, "Weekday Schedule", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 <div class="checkbox">
                     @Html.EditorFor(model => model.isWeekDay)
@@ -44,7 +44,7 @@
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.comments, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.comments, "Comment", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.EditorFor(model => model.comments, new { htmlAttributes = new { @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.comments, "", new { @class = "text-danger" })
