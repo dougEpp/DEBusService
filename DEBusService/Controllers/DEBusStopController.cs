@@ -200,19 +200,21 @@ namespace DEBusService.Controllers
 
                 if (routeStops.Count == 1)//One route stops at the selected stop
                 {
-                    routeStop routeStop = db.routeStops.Where(r=>r.busStop.busStopNumber == id && r.busStopNumber == id).FirstOrDefault();
+                    //find routeStop based on the selected stop and redirect to routeStopSchedule for that routeStop
+                    routeStop routeStop = db.routeStops.Where(r=>r.busStop.busStopNumber == id).FirstOrDefault();
                     return RedirectToAction("RouteStopSchedule", "DERouteSchedule", new { id = routeStop.routeStopId });
                 }
+                //else more than one route stops at the selected stop
 
-                //if more than one route stops at the selected stop, have user select a route
+                //group routeStops by route, so each route exists once in the list
                 routeStops = routeStops.GroupBy(r=>r.busRoute).SelectMany(r=>r).ToList();
-                List<busRoute> busRoutes = new List<busRoute>();
 
+                //generate a select list of bus routes
+                List<busRoute> busRoutes = new List<busRoute>();
                 foreach(routeStop r in routeStops)
                 {
                     busRoutes.Add(r.busRoute);
                 }
-
                 ViewBag.busRoutes = new SelectList(busRoutes.OrderBy(r=>r.routeName), "busRouteCode", "routeName");
 
                 return View(routeStops);

@@ -20,14 +20,21 @@ namespace DEBusService.Controllers
     {
         private BusServiceContext db = new BusServiceContext();
 
-        // GET: RouteSchedule
+        /// <summary>
+        /// Shows a list of all route schedules
+        /// </summary>
+        /// <returns>A list of all route schedules</returns>
         public ActionResult Index()
         {
             var routeSchedules = db.routeSchedules.Include(r => r.busRoute);
             return View(routeSchedules.ToList());
         }
 
-        // GET: RouteSchedule/Details/5
+        /// <summary>
+        /// Shows details for the selected route schedule
+        /// </summary>
+        /// <param name="id">the id of the selected route schedule</param>
+        /// <returns>Details for the selected route schedule</returns>
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -42,16 +49,21 @@ namespace DEBusService.Controllers
             return View(routeSchedule);
         }
 
-        // GET: RouteSchedule/Create
+        /// <summary>
+        /// Allows the user to create a new route schedule
+        /// </summary>
+        /// <returns>A form for the user to create a new route schedule</returns>
         public ActionResult Create()
         {
             ViewBag.busRouteCode = new SelectList(db.busRoutes, "busRouteCode", "routeName");
             return View();
         }
 
-        // POST: RouteSchedule/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        /// <summary>
+        /// Binds and saves the new route schedule to the database
+        /// </summary>
+        /// <param name="routeSchedule">The newly created routeSchedule object</param>
+        /// <returns>a redirect to the index action</returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "routeScheduleId,busRouteCode,startTime,isWeekDay,comments")] routeSchedule routeSchedule)
@@ -67,7 +79,11 @@ namespace DEBusService.Controllers
             return View(routeSchedule);
         }
 
-        // GET: RouteSchedule/Edit/5
+        /// <summary>
+        /// Allows the user to edit a selected route schedule
+        /// </summary>
+        /// <param name="id">The id of the route schedule to be edited</param>
+        /// <returns>a form for the user to edit the selected route schedule</returns>
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -83,9 +99,11 @@ namespace DEBusService.Controllers
             return View(routeSchedule);
         }
 
-        // POST: RouteSchedule/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        /// <summary>
+        /// Binds and saves the newly edited route schedule to the database
+        /// </summary>
+        /// <param name="routeSchedule">the edited routeSchedule object</param>
+        /// <returns>a redirect to the index action</returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "routeScheduleId,busRouteCode,startTime,isWeekDay,comments")] routeSchedule routeSchedule)
@@ -100,7 +118,11 @@ namespace DEBusService.Controllers
             return View(routeSchedule);
         }
 
-        // GET: RouteSchedule/Delete/5
+        /// <summary>
+        /// Allows the user to delete a selected route schedule
+        /// </summary>
+        /// <param name="id">the id of the route schedule to be deleted</param>
+        /// <returns>the route schedule to be deleted</returns>
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -115,7 +137,11 @@ namespace DEBusService.Controllers
             return View(routeSchedule);
         }
 
-        // POST: RouteSchedule/Delete/5
+        /// <summary>
+        /// Deletes the selected record from the database
+        /// </summary>
+        /// <param name="id">The id of the selected route schedule</param>
+        /// <returns>the index view, minus the newly deleted route schedule</returns>
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
@@ -168,7 +194,10 @@ namespace DEBusService.Controllers
                 return RedirectToAction("Index", "DEBusStop");
             }
         }
-
+        /// <summary>
+        /// Cleans up memory resources and connections for this session
+        /// </summary>
+        /// <param name="disposing">Event handler for disposing of memory</param>
         protected override void Dispose(bool disposing)
         {
             if (disposing)
