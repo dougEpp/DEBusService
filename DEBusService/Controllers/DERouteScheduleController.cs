@@ -1,4 +1,10 @@
-﻿using System;
+﻿//This is the controller to create, read, update and delete bus stops
+//Revision History:
+//  2015/09/16 Created, Doug Epp
+//  2015/09/29 Added RouteStopSchedule action and view
+//  2015/09/30 Finished RouteStopSchedule code
+
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
@@ -119,35 +125,45 @@ namespace DEBusService.Controllers
             db.SaveChanges();
             return RedirectToAction("Index");
         }
-
+        /// <summary>
+        /// Shows the user all scheduled stops for the selected route and stop
+        /// </summary>
+        /// <param name="id">the id of the selected routeStop </param>
+        /// <returns>the list of routeSchedules for the selected route and stop</returns>
         public ActionResult RouteStopSchedule(int? id)
         {
             try
             {
-                if (id == null)
+                if (id == null)//no routeStop has been passed to the action
                 {
                     throw new Exception("Please select a bus stop and route.");
                 }
 
                 routeStop routeStop = db.routeStops.Find(id);
-                if (routeStop == null)
+                if (routeStop == null)//the selected routeStop doesn't exist in the database
                 {
                     throw new Exception("Please select a valid bus stop and route.");
                 }
 
+                //find all routeSchedules for the selected route
                 var routeSchedules = db.routeSchedules.Where(s => s.busRouteCode == routeStop.busRouteCode);
-                if (routeSchedules.ToList().Count == 0)
+                if (routeSchedules.ToList().Count == 0)//there are no schedules in the database for the selected route
                 {
                     throw new Exception("There are no schedules associated with that route.");
                 }
+
+
+                //get the offsetminutes for the selected route stop
+                double minutes = (double)routeStop.offsetMinutes;
+                TimeSpan offSetMinutes = TimeSpan.FromMinutes(minutes);
+                ViewBag.OffsetMinutes = offSetMinutes;
+
                 ViewBag.StopLocation = routeStop.busStop.location;
-                double offsetMinutes = (double)routeStop.offsetMinutes;
-                TimeSpan ts = TimeSpan.FromMinutes(offsetMinutes);
-                ViewBag.ts = ts;
                 return View(routeSchedules);
             }
             catch (Exception ex)
             {
+                //if something went wrong, send user back to list of bus stops with the appropriate error message
                 TempData["message"] = ex.Message;
                 return RedirectToAction("Index", "DEBusStop");
             }

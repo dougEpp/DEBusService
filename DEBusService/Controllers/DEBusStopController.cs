@@ -173,31 +173,38 @@ namespace DEBusService.Controllers
             db.SaveChanges();
             return RedirectToAction("Index");
         }
-
+        /// <summary>
+        /// Allows the user to select the route they want to see schedules for
+        /// </summary>
+        /// <param name="id">The id of the selected bus stop</param>
+        /// <returns>A select list of routes that stop at the selected stop, or a redirect to "routeStopSchedule" if there is only one such route</returns>
         public ActionResult RouteSelector(int? id)
         {
             try
             {
-                if (id == null)
+                if (id == null)//No stop has been selected
                 {
                     throw new Exception("Please select a bus stop number");
                 }
-                else
+                else //save the stop id to Session
                 {
                     Session["busStopId"] = id;
                 }
 
                 List<routeStop> routeStops = db.routeStops.Where(r=>r.busStop.busStopNumber == id).ToList();
-                if (routeStops.Count == 0)
+
+                if (routeStops.Count == 0)//No routes stop at the selected stop
                 {
                     throw new Exception("There are no routes using the selected stop.");
                 }
-                if (routeStops.Count == 1)
+
+                if (routeStops.Count == 1)//One route stops at the selected stop
                 {
                     routeStop routeStop = db.routeStops.Where(r=>r.busStop.busStopNumber == id && r.busStopNumber == id).FirstOrDefault();
                     return RedirectToAction("RouteStopSchedule", "DERouteSchedule", new { id = routeStop.routeStopId });
                 }
 
+                //if more than one route stops at the selected stop, have user select a route
                 routeStops = routeStops.GroupBy(r=>r.busRoute).SelectMany(r=>r).ToList();
                 List<busRoute> busRoutes = new List<busRoute>();
 
@@ -206,24 +213,40 @@ namespace DEBusService.Controllers
                     busRoutes.Add(r.busRoute);
                 }
 
-
                 ViewBag.busRoutes = new SelectList(busRoutes.OrderBy(r=>r.routeName), "busRouteCode", "routeName");
 
                 return View(routeStops);
             }
             catch (Exception ex)
             {
+                //if something went wrong, send user back to list of bus stops with the appropriate error message
                 TempData["message"] = ex.Message;
             }
             return RedirectToAction("Index");
         }
 
+        /// <summary>
+        /// Redirects the user to the routeStopSchedule view according to their selected route
+        /// </summary>
+        /// <param name="busRoutes">the id of the selected bus route</param>
+        /// <returns>A redirect to the appropriate routeStopSchedule view</returns>
         [HttpPost]
         public ActionResult RouteSelector(string busRoutes)
         {
-            int busStopId = int.Parse(Session["busStopId"].ToString());
-            routeStop routeStop = db.routeStops.Where(s => s.busRouteCode == busRoutes && s.busStop.busStopNumber == busStopId).FirstOrDefault();
-            return RedirectToAction("RouteStopSchedule", "DERouteSchedule", new {id=routeStop.routeStopId} );
+            try
+            {
+                //gets the selected bus stop from Session
+                int busStopId = int.Parse(Session["busStopId"].ToString());
+
+                //finds the route stop which matches the selected bus route to the selectd bus stop
+                routeStop routeStop = db.routeStops.Where(s => s.busRouteCode == busRoutes && s.busStop.busStopNumber == busStopId).FirstOrDefault();
+                return RedirectToAction("RouteStopSchedule", "DERouteSchedule", new { id = routeStop.routeStopId });
+            }
+            catch (Exception ex)
+            {
+                TempData["message"] = ex.Message;
+            }
+            return RedirectToAction("Index");
         }
 
         /// <summary>
