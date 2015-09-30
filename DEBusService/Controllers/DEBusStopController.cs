@@ -241,7 +241,7 @@ namespace DEBusService.Controllers
                 int busStopId = int.Parse(Session["busStopId"].ToString());
 
                 //finds the route stop which matches the selected bus route to the selectd bus stop
-                routeStop routeStop = db.routeStops.Where(s => s.busRouteCode == busRoutes && s.busStop.busStopNumber == busStopId).FirstOrDefault();
+                routeStop routeStop = db.routeStops.Where(s => s.busRouteCode == busRoutes && s.busStop.busStopNumber == busStopId).Single();
                 return RedirectToAction("RouteStopSchedule", "DERouteSchedule", new { id = routeStop.routeStopId });
             }
             catch (Exception ex)

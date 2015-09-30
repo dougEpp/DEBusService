@@ -178,21 +178,20 @@ namespace DEBusService.Controllers
                     throw new Exception("There are no schedules associated with that route.");
                 }
 
-
                 //get the offsetminutes for the selected route stop
                 double minutes = (double)routeStop.offsetMinutes;
                 TimeSpan offSetMinutes = TimeSpan.FromMinutes(minutes);
                 ViewBag.OffsetMinutes = offSetMinutes;
 
-                ViewBag.StopLocation = routeStop.busStop.location;
+                ViewBag.BusStop = routeStop.busStop;
                 return View(routeSchedules);
             }
             catch (Exception ex)
             {
                 //if something went wrong, send user back to list of bus stops with the appropriate error message
                 TempData["message"] = ex.Message;
-                return RedirectToAction("Index", "DEBusStop");
             }
+            return RedirectToAction("Index", "DEBusStop");
         }
         /// <summary>
         /// Cleans up memory resources and connections for this session
