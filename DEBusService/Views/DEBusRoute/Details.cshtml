@@ -1,0 +1,32 @@
+﻿@model DEBusService.Models.busRoute
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Bus Route @Model.busRouteCode <br /><small>@Model.routeName</small></h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            Route Name
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.routeName)
+        </dd>
+
+    </dl>
+    <ul>
+        @foreach (var stop in Model.routeStops.OrderBy(stop => stop.offsetMinutes))
+        {
+            <li>@Html.ActionLink(stop.busStop.location + " - " + stop.busStopNumber, "Details", "DEBusStops", new { id = stop.busStopNumber }, null)</li>
+        }
+    </ul>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.busRouteCode }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

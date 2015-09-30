@@ -1,0 +1,40 @@
+﻿@model IEnumerable<DEBusService.Models.busRoute>
+
+@{
+    ViewBag.Title = "Bus Route Listing";
+}
+
+<h2>@ViewBag.Title</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            Route Code
+        </th>
+        <th>
+            Route Name
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @item.busRouteCode
+            </td>
+            <td>
+                @Html.ActionLink(item.routeName, "Index", "DERouteStop", new { id = item.busRouteCode }, null)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.busRouteCode }) |
+                @Html.ActionLink("Details", "Details", new { id = item.busRouteCode }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.busRouteCode })
+            </td>
+        </tr>
+    }
+
+</table>

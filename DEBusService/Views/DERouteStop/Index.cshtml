@@ -1,0 +1,43 @@
+﻿@model IEnumerable<DEBusService.Models.routeStop>
+
+@{
+    ViewBag.Title = "Stops for Route " + ViewBag.RouteName;
+}
+<h2>@ViewBag.Title</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create") |
+    @Html.ActionLink("Back to List", "Index", "DEBusRoute")
+</p>
+<table class="table">
+    <tr>
+        <th>Bus Stop Number</th>
+        <th>
+            Location
+        </th>
+        <th>
+            Offset Minutes
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.busStopNumber)
+        </td>
+        <td>
+            @Html.ActionLink(item.busStop.location, "RouteSelector", "DEBusStop", new { id = item.busStopNumber }, null)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.offsetMinutes)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.routeStopId }) |
+            @Html.ActionLink("Details", "Details", new { id=item.routeStopId }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.routeStopId })
+        </td>
+    </tr>
+}
+
+</table>
