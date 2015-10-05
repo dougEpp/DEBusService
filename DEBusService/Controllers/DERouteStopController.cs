@@ -45,6 +45,24 @@ namespace DEBusService.Controllers
                 routeStops = routeStops.Where(r => r.busRouteCode.Equals(id.ToString()));
 
                 ViewBag.RouteName = id + " - " + db.busRoutes.Find(id.ToString()).routeName;
+                
+                //Experimental; checking how many times a route stops at a given stop
+                var rs = routeStops.ToList();
+                List<int> numTimes = new List<int>();
+                for (int i = 0; i < rs.Count; i++)
+                {
+                    numTimes.Add(0);
+                    foreach (var item in routeStops)
+                    {
+                        if (item.busStopNumber == rs[i].busStopNumber)
+                        {
+                        numTimes[i]++;
+
+                        }
+                    }
+                }
+                ViewBag.rs = rs;
+                ViewBag.NumTimes = numTimes;
 
                 return View(routeStops.OrderBy(r => r.offsetMinutes).ToList());
             }
