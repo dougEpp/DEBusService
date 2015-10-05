@@ -207,7 +207,7 @@ namespace DEBusService.Controllers
                 //else more than one route stops at the selected stop
 
                 //group routeStops by distinct bus route code
-                routeStops = routeStops.GroupBy(s => s.busRouteCode).Select(grp=>grp.First()).ToList();
+                routeStops = routeStops.GroupBy(s => s.busRouteCode).Select(grp => grp.First()).ToList();
 
                 //generate a select list of bus routes
                 List<busRoute> busRoutes = new List<busRoute>();
@@ -239,10 +239,14 @@ namespace DEBusService.Controllers
             {
                 //gets the selected bus stop from Session
                 int busStopId = int.Parse(Session["busStopId"].ToString());
+                routeStop routeStop = new routeStop();
+                routeStop secondStop = new routeStop();
 
                 //finds the route stop which matches the selected bus route to the selectd bus stop
-                routeStop routeStop = db.routeStops.Where(s => s.busRouteCode == busRoutes && s.busStop.busStopNumber == busStopId).Single();
+                routeStop = db.routeStops.Where(s => s.busRouteCode == busRoutes && s.busStop.busStopNumber == busStopId).FirstOrDefault();
+
                 return RedirectToAction("RouteStopSchedule", "DERouteSchedule", new { id = routeStop.routeStopId });
+
             }
             catch (Exception ex)
             {

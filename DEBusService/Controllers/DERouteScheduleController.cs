@@ -174,7 +174,7 @@ namespace DEBusService.Controllers
                 //find all routeSchedules for the selected route
                 var routeSchedules = db.routeSchedules
                     .Where(s => s.busRouteCode == routeStop.busRouteCode)
-                    .OrderBy(s=>s.startTime);
+                    .OrderBy(s => s.startTime);
                 if (routeSchedules.ToList().Count == 0)//there are no schedules in the database for the selected route
                 {
                     throw new Exception("There are no schedules associated with that route.");
@@ -187,6 +187,7 @@ namespace DEBusService.Controllers
 
                 ViewBag.BusStop = routeStop.busStop;
                 return View(routeSchedules);
+
             }
             catch (Exception ex)
             {
