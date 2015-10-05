@@ -191,7 +191,7 @@ namespace DEBusService.Controllers
                     Session["busStopId"] = id;
                 }
 
-                List<routeStop> routeStops = db.routeStops.Where(r=>r.busStop.busStopNumber == id).ToList();
+                List<routeStop> routeStops = db.routeStops.Where(r => r.busStop.busStopNumber == id).ToList();
 
                 if (routeStops.Count == 0)//No routes stop at the selected stop
                 {
@@ -201,18 +201,21 @@ namespace DEBusService.Controllers
                 if (routeStops.Count == 1)//One route stops at the selected stop
                 {
                     //find routeStop based on the selected stop and redirect to routeStopSchedule for that routeStop
-                    routeStop routeStop = db.routeStops.Where(r=>r.busStop.busStopNumber == id).FirstOrDefault();
+                    routeStop routeStop = db.routeStops.Where(r => r.busStop.busStopNumber == id).FirstOrDefault();
                     return RedirectToAction("RouteStopSchedule", "DERouteSchedule", new { id = routeStop.routeStopId });
                 }
                 //else more than one route stops at the selected stop
 
+                //group routeStops by distinct bus route code
+                routeStops = routeStops.GroupBy(s => s.busRouteCode).Select(grp=>grp.First()).ToList();
+
                 //generate a select list of bus routes
                 List<busRoute> busRoutes = new List<busRoute>();
-                foreach(routeStop r in routeStops)
+                foreach (routeStop r in routeStops)
                 {
                     busRoutes.Add(r.busRoute);
                 }
-                ViewBag.busRoutes = new SelectList(busRoutes.OrderBy(r=>r.routeName), "busRouteCode", "routeName");
+                ViewBag.busRoutes = new SelectList(busRoutes.OrderBy(r => r.routeName), "busRouteCode", "routeName");
 
                 return View(routeStops);
             }
