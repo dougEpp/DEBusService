@@ -206,9 +206,6 @@ namespace DEBusService.Controllers
                 }
                 //else more than one route stops at the selected stop
 
-                //group routeStops by route, so each route exists once in the list
-                routeStops = routeStops.GroupBy(r=>r.busRoute).SelectMany(r=>r).ToList();
-
                 //generate a select list of bus routes
                 List<busRoute> busRoutes = new List<busRoute>();
                 foreach(routeStop r in routeStops)
