@@ -246,7 +246,6 @@ namespace DEBusService.Controllers
                 routeStop = db.routeStops.Where(s => s.busRouteCode == busRoutes && s.busStop.busStopNumber == busStopId).FirstOrDefault();
 
                 return RedirectToAction("RouteStopSchedule", "DERouteSchedule", new { id = routeStop.routeStopId });
-
             }
             catch (Exception ex)
             {
