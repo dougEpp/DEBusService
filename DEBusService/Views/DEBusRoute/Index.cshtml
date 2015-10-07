@@ -17,6 +17,7 @@
         <th>
             Route Name
         </th>
+        <th>Monitored Trips</th>
         <th></th>
     </tr>
 
@@ -28,6 +29,9 @@
             </td>
             <td>
                 @Html.ActionLink(item.routeName, "Index", "DERouteStop", new { id = item.busRouteCode }, null)
+            </td>
+            <td>
+                @Html.ActionLink("Link", "Index", "DETrip", new { busRouteCode = item.busRouteCode, routeName = item.routeName}, null)
             </td>
             <td>
                 @Html.ActionLink("Edit", "Edit", new { id = item.busRouteCode }) |
