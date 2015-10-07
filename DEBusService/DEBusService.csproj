@@ -329,11 +329,6 @@
     <Content Include="Views\DERouteStop\Details.cshtml" />
     <Content Include="Views\DERouteStop\Edit.cshtml" />
     <Content Include="Views\DERouteStop\Index.cshtml" />
-    <Content Include="Views\DETrip\Create.cshtml" />
-    <Content Include="Views\DETrip\Delete.cshtml" />
-    <Content Include="Views\DETrip\Details.cshtml" />
-    <Content Include="Views\DETrip\Edit.cshtml" />
-    <Content Include="Views\DETrip\Index.cshtml" />
     <Content Include="Views\DETripStop\Create.cshtml" />
     <Content Include="Views\DETripStop\Delete.cshtml" />
     <Content Include="Views\DETripStop\Details.cshtml" />
@@ -341,6 +336,7 @@
     <Content Include="Views\DETripStop\Index.cshtml" />
     <Content Include="Views\DEBusStop\RouteSelector.cshtml" />
     <Content Include="Views\DERouteSchedule\RouteStopSchedule.cshtml" />
+    <Content Include="Views\DETrip\Index.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
