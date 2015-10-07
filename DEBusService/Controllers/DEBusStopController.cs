@@ -243,7 +243,7 @@ namespace DEBusService.Controllers
                 routeStop secondStop = new routeStop();
 
                 //finds the route stop which matches the selected bus route to the selectd bus stop
-                routeStop = db.routeStops.Where(s => s.busRouteCode == busRoutes && s.busStop.busStopNumber == busStopId).FirstOrDefault();
+                routeStop = db.routeStops.Where(s => s.busRouteCode == busRoutes && s.busStopNumber == busStopId).FirstOrDefault();
 
                 return RedirectToAction("RouteStopSchedule", "DERouteSchedule", new { id = routeStop.routeStopId });
             }
