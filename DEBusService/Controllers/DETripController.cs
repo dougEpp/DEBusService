@@ -48,5 +48,14 @@ namespace DEBusService.Controllers
             }
             return RedirectToAction("Index", "DEBusRoute");
         }
+        public ActionResult Create()
+        {
+            return View();
+        }
+        [HttpPost]
+        public ActionResult Create(trip trip)
+        {
+            return RedirectToAction("Index");
+        }
     }
 }
