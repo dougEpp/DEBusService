@@ -11,6 +11,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using DEBusService.Models;
+using DEBusService.Models.ViewModels;
 
 
 namespace DEBusService.Controllers
@@ -32,12 +33,26 @@ namespace DEBusService.Controllers
             List<busStop> busStops = new List<busStop>();
             if (orderBy == "location")
             {
-                busStops = db.busStops.OrderBy(s => s.location).ToList();
+                busStops = db.busStops.Include(s => s.routeStops).OrderBy(s => s.location).ToList();
             }
             else
             {
-                busStops = db.busStops.OrderBy(s => s.busStopNumber).ToList();
+                busStops = db.busStops.Include(s => s.routeStops).OrderBy(s => s.busStopNumber).ToList();
             }
+
+            List<busStopLocation> locations = new List<busStopLocation>();
+            foreach (busStop b in busStops)
+            {
+                if (b.routeStops.Count > 0)
+                {
+                    locations.Add(new busStopLocation(b.location, true));
+                }
+                else
+                {
+                    locations.Add(new busStopLocation(b.location, false));
+                }
+            }
+            ViewBag.Locations = locations;
 
             return View(busStops);
         }
