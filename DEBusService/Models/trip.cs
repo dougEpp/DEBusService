@@ -11,6 +11,7 @@ namespace DEBusService.Models
 {
     using System;
     using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
     
     public partial class trip
     {
@@ -20,11 +21,18 @@ namespace DEBusService.Models
             this.tripStops = new HashSet<tripStop>();
         }
     
+        [ScaffoldColumn(false)]
         public int tripId { get; set; }
+        [ScaffoldColumn(false)]
         public int routeScheduleId { get; set; }
+        [Display(Name="Trip Date")]
         public System.DateTime tripDate { get; set; }
+        [ScaffoldColumn(false)]
         public int driverId { get; set; }
+        [ScaffoldColumn(false)]
         public int busId { get; set; }
+        [Display(Name="Comments")]
+        [DataType(DataType.MultilineText)]
         public string comments { get; set; }
     
         public virtual bus bus { get; set; }

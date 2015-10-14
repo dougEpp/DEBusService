@@ -20,7 +20,7 @@
         @foreach (var item in Model)
         {
         <tr>
-            <td>@item.tripDate.ToShortDateString()</td>
+            <td>@item.tripDate.ToString("ddd dd MMM, yyyy")</td>
             <td>@item.routeSchedule.startTime</td>
             <td>@item.driver.fullName</td>
             <td>@item.bus.busNumber</td>
