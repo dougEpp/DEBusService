@@ -9,7 +9,7 @@
 
 @if (Model.ToList().Count > 0)
 {
-    <table>
+    <table class="table">
         <tr>
             <th>Date</th>
             <th>Start Time</th>
@@ -17,17 +17,17 @@
             <th>Bus #</th>
             <th>Comments</th>
         </tr>
-    </table>
-    foreach (var item in Model)
-    {
+        @foreach (var item in Model)
+        {
         <tr>
-            <td>@item.tripDate</td>
+            <td>@item.tripDate.ToShortDateString()</td>
             <td>@item.routeSchedule.startTime</td>
             <td>@item.driver.fullName</td>
             <td>@item.bus.busNumber</td>
             <td>@item.comments</td>
         </tr>
-    }
+        }
+    </table>
 }
 else
 {

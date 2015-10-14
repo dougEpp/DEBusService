@@ -338,6 +338,7 @@
     <Content Include="Views\DEBusStop\RouteSelector.cshtml" />
     <Content Include="Views\DERouteSchedule\RouteStopSchedule.cshtml" />
     <Content Include="Views\DETrip\Index.cshtml" />
+    <Content Include="Views\DETrip\Create.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

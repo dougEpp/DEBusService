@@ -1,0 +1,57 @@
+﻿@model DEBusService.Models.trip
+
+@{
+    ViewBag.Title = "Create Trip  for " + Session["busRouteCode"] + " - " + Session["routeName"];
+}
+
+<h2>@ViewBag.Title</h2>
+
+@Html.ActionLink("Back to List", "Index")
+
+@using (Html.BeginForm())
+{
+    @Html.ValidationSummary(false, "Warning:", new { @class="text-danger"})
+    //todo: assignment step 4.d
+    <div class="form-group">
+        @Html.LabelFor(model => model.tripDate, "Trip Date", new { @class = "control-label" })
+        <br />
+        @Html.EditorFor(model => model.tripDate, new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.comments, "Comments", new { @class = "control-label" })
+        <br />
+        @Html.EditorFor(model => model.comments, new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(model=>model.routeScheduleId, "Start Time")
+        @Html.DropDownList("routeScheduleId", ViewBag.routeScheduleId as SelectList)
+        @Html.ValidationMessageFor(model=>model.routeScheduleId)
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(model=>model.driverId, "Driver")
+        @Html.DropDownList("driverId", ViewBag.driverId as SelectList)
+        @Html.ValidationMessageFor(model=>model.driverId)
+    </div>
+
+    @Html.LabelFor(model => model.bus, "Bus #")
+    <br />
+    int counter = 1;
+    foreach (var bus in ViewBag.Buses as IQueryable<DEBusService.Models.bus>)
+    {
+        <div class="radio-inline">
+            <label class="radio-inline">@Html.RadioButtonFor(model => model.busId, bus.busId, new { @id = "bus" + bus.busNumber })@bus.busNumber</label>
+        </div>
+    
+        if(counter %5 == 0)
+        {
+            <br />
+        }
+        counter++;
+    }
+    
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Create" class="btn btn-default" />
+        </div>
+    </div>
+}
