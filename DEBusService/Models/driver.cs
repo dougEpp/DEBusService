@@ -22,7 +22,7 @@ namespace DEBusService.Models
     
         public int driverId { get; set; }
         public string firstName { get; set; }
-        public byte[] lastName { get; set; }
+        public string lastName { get; set; }
         public string fullName { get; set; }
         public string homePhone { get; set; }
         public string workPhone { get; set; }

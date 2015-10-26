@@ -14,13 +14,14 @@ namespace DEBusService.Controllers
     {
         private BusServiceContext db = new BusServiceContext();
 
-        // GET: Driver
+        // GET: DEDriver
         public ActionResult Index()
         {
-            return View(db.drivers.ToList());
+            var drivers = db.drivers.Include(d => d.province);
+            return View(drivers.ToList());
         }
 
-        // GET: Driver/Details/5
+        // GET: DEDriver/Details/5
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -35,18 +36,19 @@ namespace DEBusService.Controllers
             return View(driver);
         }
 
-        // GET: Driver/Create
+        // GET: DEDriver/Create
         public ActionResult Create()
         {
+            ViewBag.provinceCode = new SelectList(db.provinces, "provinceCode", "name");
             return View();
         }
 
-        // POST: Driver/Create
+        // POST: DEDriver/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "driverId,firstName,lastName,fullName,homePhone,workPhone")] driver driver)
+        public ActionResult Create([Bind(Include = "driverId,firstName,lastName,fullName,homePhone,workPhone,street,city,postalCode,provinceCode,dateHired")] driver driver)
         {
             if (ModelState.IsValid)
             {
@@ -55,10 +57,11 @@ namespace DEBusService.Controllers
                 return RedirectToAction("Index");
             }
 
+            ViewBag.provinceCode = new SelectList(db.provinces, "provinceCode", "name", driver.provinceCode);
             return View(driver);
         }
 
-        // GET: Driver/Edit/5
+        // GET: DEDriver/Edit/5
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -70,15 +73,16 @@ namespace DEBusService.Controllers
             {
                 return HttpNotFound();
             }
+            ViewBag.provinceCode = new SelectList(db.provinces, "provinceCode", "name", driver.provinceCode);
             return View(driver);
         }
 
-        // POST: Driver/Edit/5
+        // POST: DEDriver/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "driverId,firstName,lastName,fullName,homePhone,workPhone")] driver driver)
+        public ActionResult Edit([Bind(Include = "driverId,firstName,lastName,fullName,homePhone,workPhone,street,city,postalCode,provinceCode,dateHired")] driver driver)
         {
             if (ModelState.IsValid)
             {
@@ -86,10 +90,11 @@ namespace DEBusService.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
+            ViewBag.provinceCode = new SelectList(db.provinces, "provinceCode", "name", driver.provinceCode);
             return View(driver);
         }
 
-        // GET: Driver/Delete/5
+        // GET: DEDriver/Delete/5
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -104,7 +109,7 @@ namespace DEBusService.Controllers
             return View(driver);
         }
 
-        // POST: Driver/Delete/5
+        // POST: DEDriver/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)

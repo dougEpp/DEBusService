@@ -207,6 +207,7 @@
     </Compile>
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="Models\Metadata\driverMetadata.cs" />
     <Compile Include="Models\province.cs">
       <DependentUpon>DEBusService.tt</DependentUpon>
     </Compile>
@@ -322,11 +323,6 @@
     <Content Include="Views\DEBus\Details.cshtml" />
     <Content Include="Views\DEBus\Edit.cshtml" />
     <Content Include="Views\DEBus\Index.cshtml" />
-    <Content Include="Views\DEDriver\Create.cshtml" />
-    <Content Include="Views\DEDriver\Delete.cshtml" />
-    <Content Include="Views\DEDriver\Details.cshtml" />
-    <Content Include="Views\DEDriver\Edit.cshtml" />
-    <Content Include="Views\DEDriver\Index.cshtml" />
     <Content Include="Views\DERouteSchedule\Create.cshtml" />
     <Content Include="Views\DERouteSchedule\Delete.cshtml" />
     <Content Include="Views\DERouteSchedule\Details.cshtml" />
@@ -346,6 +342,11 @@
     <Content Include="Views\DERouteSchedule\RouteStopSchedule.cshtml" />
     <Content Include="Views\DETrip\Index.cshtml" />
     <Content Include="Views\DETrip\Create.cshtml" />
+    <Content Include="Views\DEDriver\Create.cshtml" />
+    <Content Include="Views\DEDriver\Delete.cshtml" />
+    <Content Include="Views\DEDriver\Details.cshtml" />
+    <Content Include="Views\DEDriver\Edit.cshtml" />
+    <Content Include="Views\DEDriver\Index.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
