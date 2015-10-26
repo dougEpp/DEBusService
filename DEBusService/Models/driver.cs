@@ -22,11 +22,17 @@ namespace DEBusService.Models
     
         public int driverId { get; set; }
         public string firstName { get; set; }
-        public string lastName { get; set; }
+        public byte[] lastName { get; set; }
         public string fullName { get; set; }
         public string homePhone { get; set; }
         public string workPhone { get; set; }
+        public string street { get; set; }
+        public string city { get; set; }
+        public string postalCode { get; set; }
+        public string provinceCode { get; set; }
+        public System.DateTime dateHired { get; set; }
     
+        public virtual province province { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<trip> trips { get; set; }
     }

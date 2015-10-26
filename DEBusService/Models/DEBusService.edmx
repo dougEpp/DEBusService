@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="BusServiceModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+      <Schema Namespace="DEBusService.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="bus">
           <Key>
             <PropertyRef Name="busId" />
@@ -30,16 +30,41 @@
           <Property Name="locationHash" Type="int" Nullable="false" />
           <Property Name="goingDowntown" Type="bit" Nullable="false" />
         </EntityType>
+        <EntityType Name="country">
+          <Key>
+            <PropertyRef Name="countryCode" />
+          </Key>
+          <Property Name="countryCode" Type="char" MaxLength="2" Nullable="false" />
+          <Property Name="name" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="postalPattern" Type="varchar(max)" />
+          <Property Name="phonePattern" Type="varchar(max)" />
+        </EntityType>
         <EntityType Name="driver">
           <Key>
             <PropertyRef Name="driverId" />
           </Key>
           <Property Name="driverId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="firstName" Type="nvarchar" MaxLength="50" />
-          <Property Name="lastName" Type="nvarchar" MaxLength="50" />
-          <Property Name="fullName" Type="nvarchar" MaxLength="100" />
-          <Property Name="homePhone" Type="nvarchar" MaxLength="12" />
-          <Property Name="workPhone" Type="nvarchar" MaxLength="12" />
+          <Property Name="firstName" Type="varchar" MaxLength="50" />
+          <Property Name="lastName" Type="varbinary" MaxLength="50" />
+          <Property Name="fullName" Type="varchar" MaxLength="100" />
+          <Property Name="homePhone" Type="varchar" MaxLength="12" />
+          <Property Name="workPhone" Type="varchar" MaxLength="12" />
+          <Property Name="street" Type="varchar" MaxLength="50" />
+          <Property Name="city" Type="varchar" MaxLength="50" />
+          <Property Name="postalCode" Type="varchar" MaxLength="9" />
+          <Property Name="provinceCode" Type="char" MaxLength="2" />
+          <Property Name="dateHired" Type="date" Nullable="false" />
+        </EntityType>
+        <EntityType Name="province">
+          <Key>
+            <PropertyRef Name="provinceCode" />
+          </Key>
+          <Property Name="provinceCode" Type="char" MaxLength="2" Nullable="false" />
+          <Property Name="name" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="countryCode" Type="char" MaxLength="2" Nullable="false" />
+          <Property Name="taxCode" Type="varchar" MaxLength="50" />
+          <Property Name="taxRate" Type="float" Nullable="false" />
+          <Property Name="capital" Type="varchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="routeSchedule">
           <Key>
@@ -91,6 +116,30 @@
           <Property Name="tripStopTime" Type="time" Precision="7" Nullable="false" />
           <Property Name="comments" Type="nvarchar(max)" />
         </EntityType>
+        <Association Name="FK_driver_province">
+          <End Role="province" Type="Self.province" Multiplicity="0..1" />
+          <End Role="driver" Type="Self.driver" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="province">
+              <PropertyRef Name="provinceCode" />
+            </Principal>
+            <Dependent Role="driver">
+              <PropertyRef Name="provinceCode" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_province_country">
+          <End Role="country" Type="Self.country" Multiplicity="1" />
+          <End Role="province" Type="Self.province" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="country">
+              <PropertyRef Name="countryCode" />
+            </Principal>
+            <Dependent Role="province">
+              <PropertyRef Name="countryCode" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_routeSchedule_busRoute">
           <End Role="busRoute" Type="Self.busRoute" Multiplicity="0..1" />
           <End Role="routeSchedule" Type="Self.routeSchedule" Multiplicity="*" />
@@ -187,16 +236,26 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityContainer Name="BusServiceModelStoreContainer">
+        <EntityContainer Name="DEBusServiceStoreContainer">
           <EntitySet Name="bus" EntityType="Self.bus" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="busRoute" EntityType="Self.busRoute" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="busStop" EntityType="Self.busStop" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="country" EntityType="Self.country" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="driver" EntityType="Self.driver" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="province" EntityType="Self.province" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="routeSchedule" EntityType="Self.routeSchedule" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="routeStop" EntityType="Self.routeStop" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="trip" EntityType="Self.trip" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tripStop" EntityType="Self.tripStop" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_driver_province" Association="Self.FK_driver_province">
+            <End Role="province" EntitySet="province" />
+            <End Role="driver" EntitySet="driver" />
+          </AssociationSet>
+          <AssociationSet Name="FK_province_country" Association="Self.FK_province_country">
+            <End Role="country" EntitySet="country" />
+            <End Role="province" EntitySet="province" />
+          </AssociationSet>
           <AssociationSet Name="FK_routeSchedule_busRoute" Association="Self.FK_routeSchedule_busRoute">
             <End Role="busRoute" EntitySet="busRoute" />
             <End Role="routeSchedule" EntitySet="routeSchedule" />
@@ -234,7 +293,7 @@
     </edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
-      <Schema Namespace="BusServiceModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+      <Schema Namespace="DEBusService" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
         <EntityType Name="bus">
           <Key>
             <PropertyRef Name="busId" />
@@ -265,17 +324,46 @@
           <NavigationProperty Name="routeStops" Relationship="Self.FK_routeStop_busStop" FromRole="busStop" ToRole="routeStop" />
           <NavigationProperty Name="tripStops" Relationship="Self.FK_tripStop_busStop" FromRole="busStop" ToRole="tripStop" />
         </EntityType>
+        <EntityType Name="country">
+          <Key>
+            <PropertyRef Name="countryCode" />
+          </Key>
+          <Property Name="countryCode" Type="String" MaxLength="2" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="postalPattern" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="phonePattern" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="provinces" Relationship="Self.FK_province_country" FromRole="country" ToRole="province" />
+        </EntityType>
         <EntityType Name="driver">
           <Key>
             <PropertyRef Name="driverId" />
           </Key>
           <Property Name="driverId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="firstName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="lastName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="fullName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="homePhone" Type="String" MaxLength="12" FixedLength="false" Unicode="true" />
-          <Property Name="workPhone" Type="String" MaxLength="12" FixedLength="false" Unicode="true" />
+          <Property Name="firstName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="lastName" Type="Binary" MaxLength="50" FixedLength="false" />
+          <Property Name="fullName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="homePhone" Type="String" MaxLength="12" FixedLength="false" Unicode="false" />
+          <Property Name="workPhone" Type="String" MaxLength="12" FixedLength="false" Unicode="false" />
+          <Property Name="street" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="city" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="postalCode" Type="String" MaxLength="9" FixedLength="false" Unicode="false" />
+          <Property Name="provinceCode" Type="String" MaxLength="2" FixedLength="true" Unicode="false" />
+          <Property Name="dateHired" Type="DateTime" Nullable="false" Precision="0" />
+          <NavigationProperty Name="province" Relationship="Self.FK_driver_province" FromRole="driver" ToRole="province" />
           <NavigationProperty Name="trips" Relationship="Self.FK_trip_driver" FromRole="driver" ToRole="trip" />
+        </EntityType>
+        <EntityType Name="province">
+          <Key>
+            <PropertyRef Name="provinceCode" />
+          </Key>
+          <Property Name="provinceCode" Type="String" MaxLength="2" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="countryCode" Type="String" MaxLength="2" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="taxCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="taxRate" Type="Double" Nullable="false" />
+          <Property Name="capital" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="country" Relationship="Self.FK_province_country" FromRole="province" ToRole="country" />
+          <NavigationProperty Name="drivers" Relationship="Self.FK_driver_province" FromRole="province" ToRole="driver" />
         </EntityType>
         <EntityType Name="routeSchedule">
           <Key>
@@ -397,6 +485,30 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_province_country">
+          <End Role="country" Type="Self.country" Multiplicity="1" />
+          <End Role="province" Type="Self.province" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="country">
+              <PropertyRef Name="countryCode" />
+            </Principal>
+            <Dependent Role="province">
+              <PropertyRef Name="countryCode" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_driver_province">
+          <End Role="province" Type="Self.province" Multiplicity="0..1" />
+          <End Role="driver" Type="Self.driver" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="province">
+              <PropertyRef Name="provinceCode" />
+            </Principal>
+            <Dependent Role="driver">
+              <PropertyRef Name="provinceCode" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_trip_driver">
           <End Role="driver" Type="Self.driver" Multiplicity="1" />
           <End Role="trip" Type="Self.trip" Multiplicity="*" />
@@ -437,7 +549,9 @@
           <EntitySet Name="buses" EntityType="Self.bus" />
           <EntitySet Name="busRoutes" EntityType="Self.busRoute" />
           <EntitySet Name="busStops" EntityType="Self.busStop" />
+          <EntitySet Name="countries" EntityType="Self.country" />
           <EntitySet Name="drivers" EntityType="Self.driver" />
+          <EntitySet Name="provinces" EntityType="Self.province" />
           <EntitySet Name="routeSchedules" EntityType="Self.routeSchedule" />
           <EntitySet Name="routeStops" EntityType="Self.routeStop" />
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagram" />
@@ -463,6 +577,14 @@
             <End Role="busStop" EntitySet="busStops" />
             <End Role="tripStop" EntitySet="tripStops" />
           </AssociationSet>
+          <AssociationSet Name="FK_province_country" Association="Self.FK_province_country">
+            <End Role="country" EntitySet="countries" />
+            <End Role="province" EntitySet="provinces" />
+          </AssociationSet>
+          <AssociationSet Name="FK_driver_province" Association="Self.FK_driver_province">
+            <End Role="province" EntitySet="provinces" />
+            <End Role="driver" EntitySet="drivers" />
+          </AssociationSet>
           <AssociationSet Name="FK_trip_driver" Association="Self.FK_trip_driver">
             <End Role="driver" EntitySet="drivers" />
             <End Role="trip" EntitySet="trips" />
@@ -481,9 +603,9 @@
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="BusServiceModelStoreContainer" CdmEntityContainer="BusServiceContext">
+        <EntityContainerMapping StorageEntityContainer="DEBusServiceStoreContainer" CdmEntityContainer="BusServiceContext">
           <EntitySetMapping Name="buses">
-            <EntityTypeMapping TypeName="BusServiceModel.bus">
+            <EntityTypeMapping TypeName="DEBusService.bus">
               <MappingFragment StoreEntitySet="bus">
                 <ScalarProperty Name="busId" ColumnName="busId" />
                 <ScalarProperty Name="busNumber" ColumnName="busNumber" />
@@ -493,7 +615,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="busRoutes">
-            <EntityTypeMapping TypeName="BusServiceModel.busRoute">
+            <EntityTypeMapping TypeName="DEBusService.busRoute">
               <MappingFragment StoreEntitySet="busRoute">
                 <ScalarProperty Name="busRouteCode" ColumnName="busRouteCode" />
                 <ScalarProperty Name="routeName" ColumnName="routeName" />
@@ -501,7 +623,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="busStops">
-            <EntityTypeMapping TypeName="BusServiceModel.busStop">
+            <EntityTypeMapping TypeName="DEBusService.busStop">
               <MappingFragment StoreEntitySet="busStop">
                 <ScalarProperty Name="busStopNumber" ColumnName="busStopNumber" />
                 <ScalarProperty Name="location" ColumnName="location" />
@@ -510,8 +632,18 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="countries">
+            <EntityTypeMapping TypeName="DEBusService.country">
+              <MappingFragment StoreEntitySet="country">
+                <ScalarProperty Name="countryCode" ColumnName="countryCode" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="postalPattern" ColumnName="postalPattern" />
+                <ScalarProperty Name="phonePattern" ColumnName="phonePattern" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="drivers">
-            <EntityTypeMapping TypeName="BusServiceModel.driver">
+            <EntityTypeMapping TypeName="DEBusService.driver">
               <MappingFragment StoreEntitySet="driver">
                 <ScalarProperty Name="driverId" ColumnName="driverId" />
                 <ScalarProperty Name="firstName" ColumnName="firstName" />
@@ -519,11 +651,28 @@
                 <ScalarProperty Name="fullName" ColumnName="fullName" />
                 <ScalarProperty Name="homePhone" ColumnName="homePhone" />
                 <ScalarProperty Name="workPhone" ColumnName="workPhone" />
+                <ScalarProperty Name="street" ColumnName="street" />
+                <ScalarProperty Name="city" ColumnName="city" />
+                <ScalarProperty Name="postalCode" ColumnName="postalCode" />
+                <ScalarProperty Name="provinceCode" ColumnName="provinceCode" />
+                <ScalarProperty Name="dateHired" ColumnName="dateHired" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="provinces">
+            <EntityTypeMapping TypeName="DEBusService.province">
+              <MappingFragment StoreEntitySet="province">
+                <ScalarProperty Name="provinceCode" ColumnName="provinceCode" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="countryCode" ColumnName="countryCode" />
+                <ScalarProperty Name="taxCode" ColumnName="taxCode" />
+                <ScalarProperty Name="taxRate" ColumnName="taxRate" />
+                <ScalarProperty Name="capital" ColumnName="capital" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="routeSchedules">
-            <EntityTypeMapping TypeName="BusServiceModel.routeSchedule">
+            <EntityTypeMapping TypeName="DEBusService.routeSchedule">
               <MappingFragment StoreEntitySet="routeSchedule">
                 <ScalarProperty Name="routeScheduleId" ColumnName="routeScheduleId" />
                 <ScalarProperty Name="busRouteCode" ColumnName="busRouteCode" />
@@ -534,7 +683,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="routeStops">
-            <EntityTypeMapping TypeName="BusServiceModel.routeStop">
+            <EntityTypeMapping TypeName="DEBusService.routeStop">
               <MappingFragment StoreEntitySet="routeStop">
                 <ScalarProperty Name="routeStopId" ColumnName="routeStopId" />
                 <ScalarProperty Name="busRouteCode" ColumnName="busRouteCode" />
@@ -544,7 +693,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="sysdiagrams">
-            <EntityTypeMapping TypeName="BusServiceModel.sysdiagram">
+            <EntityTypeMapping TypeName="DEBusService.sysdiagram">
               <MappingFragment StoreEntitySet="sysdiagrams">
                 <ScalarProperty Name="name" ColumnName="name" />
                 <ScalarProperty Name="principal_id" ColumnName="principal_id" />
@@ -555,7 +704,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="trips">
-            <EntityTypeMapping TypeName="BusServiceModel.trip">
+            <EntityTypeMapping TypeName="DEBusService.trip">
               <MappingFragment StoreEntitySet="trip">
                 <ScalarProperty Name="tripId" ColumnName="tripId" />
                 <ScalarProperty Name="routeScheduleId" ColumnName="routeScheduleId" />
@@ -567,7 +716,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="tripStops">
-            <EntityTypeMapping TypeName="BusServiceModel.tripStop">
+            <EntityTypeMapping TypeName="DEBusService.tripStop">
               <MappingFragment StoreEntitySet="tripStop">
                 <ScalarProperty Name="tripStopId" ColumnName="tripStopId" />
                 <ScalarProperty Name="tripId" ColumnName="tripId" />

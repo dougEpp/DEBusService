@@ -28,7 +28,9 @@ namespace DEBusService.Models
         public virtual DbSet<bus> buses { get; set; }
         public virtual DbSet<busRoute> busRoutes { get; set; }
         public virtual DbSet<busStop> busStops { get; set; }
+        public virtual DbSet<country> countries { get; set; }
         public virtual DbSet<driver> drivers { get; set; }
+        public virtual DbSet<province> provinces { get; set; }
         public virtual DbSet<routeSchedule> routeSchedules { get; set; }
         public virtual DbSet<routeStop> routeStops { get; set; }
         public virtual DbSet<sysdiagram> sysdiagrams { get; set; }

@@ -12,25 +12,20 @@ namespace DEBusService.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class trip
+    public partial class country
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public trip()
+        public country()
         {
-            this.tripStops = new HashSet<tripStop>();
+            this.provinces = new HashSet<province>();
         }
     
-        public int tripId { get; set; }
-        public int routeScheduleId { get; set; }
-        public System.DateTime tripDate { get; set; }
-        public int driverId { get; set; }
-        public int busId { get; set; }
-        public string comments { get; set; }
+        public string countryCode { get; set; }
+        public string name { get; set; }
+        public string postalPattern { get; set; }
+        public string phonePattern { get; set; }
     
-        public virtual bus bus { get; set; }
-        public virtual driver driver { get; set; }
-        public virtual routeSchedule routeSchedule { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<tripStop> tripStops { get; set; }
+        public virtual ICollection<province> provinces { get; set; }
     }
 }
