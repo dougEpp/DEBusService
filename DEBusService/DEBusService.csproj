@@ -164,13 +164,16 @@
     <Compile Include="Controllers\DEBusController.cs" />
     <Compile Include="Controllers\DEBusRouteController.cs" />
     <Compile Include="Controllers\DEBusStopController.cs" />
+    <Compile Include="Controllers\DECountryController.cs" />
     <Compile Include="Controllers\DEDriverController.cs" />
+    <Compile Include="Controllers\DEProvinceController.cs" />
     <Compile Include="Controllers\DERouteStopController.cs" />
     <Compile Include="Controllers\DETripController.cs" />
     <Compile Include="Controllers\DETripStopController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\DERouteScheduleController.cs" />
+    <Compile Include="Controllers\RemotesController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -208,6 +211,7 @@
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\Metadata\driverMetadata.cs" />
+    <Compile Include="Models\Metadata\provinceMetadata.cs" />
     <Compile Include="Models\province.cs">
       <DependentUpon>DEBusService.tt</DependentUpon>
     </Compile>
@@ -347,8 +351,20 @@
     <Content Include="Views\DEDriver\Details.cshtml" />
     <Content Include="Views\DEDriver\Edit.cshtml" />
     <Content Include="Views\DEDriver\Index.cshtml" />
+    <Content Include="Views\DEProvince\Create.cshtml" />
+    <Content Include="Views\DEProvince\Delete.cshtml" />
+    <Content Include="Views\DEProvince\Details.cshtml" />
+    <Content Include="Views\DEProvince\Edit.cshtml" />
+    <Content Include="Views\DEProvince\Index.cshtml" />
+    <Content Include="Views\DECountry\Create.cshtml" />
+    <Content Include="Views\DECountry\Delete.cshtml" />
+    <Content Include="Views\DECountry\Details.cshtml" />
+    <Content Include="Views\DECountry\Edit.cshtml" />
+    <Content Include="Views\DECountry\Index.cshtml" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Views\Remotes\" />
+  </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />

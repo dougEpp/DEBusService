@@ -17,7 +17,8 @@ namespace DEBusService.Controllers
         // GET: DEDriver
         public ActionResult Index()
         {
-            var drivers = db.drivers.Include(d => d.province);
+            var drivers = db.drivers.Include(d => d.province)
+                .OrderBy(d => d.fullName);
             return View(drivers.ToList());
         }
 
@@ -39,7 +40,7 @@ namespace DEBusService.Controllers
         // GET: DEDriver/Create
         public ActionResult Create()
         {
-            ViewBag.provinceCode = new SelectList(db.provinces, "provinceCode", "name");
+            ViewBag.provinceCode = new SelectList(db.provinces.OrderBy(p => p.name), "provinceCode", "name");
             return View();
         }
 
@@ -48,16 +49,25 @@ namespace DEBusService.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "driverId,firstName,lastName,fullName,homePhone,workPhone,street,city,postalCode,provinceCode,dateHired")] driver driver)
+        public ActionResult Create([Bind(Include = "driverId,firstName,lastName,homePhone,workPhone,street,city,postalCode,provinceCode,dateHired")] driver driver)
         {
-            if (ModelState.IsValid)
+            try
             {
-                db.drivers.Add(driver);
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                if (ModelState.IsValid)
+                {
+                    db.drivers.Add(driver);
+                    driver.fullName = driver.lastName + ", " + driver.firstName;
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
+            }
+            catch (Exception ex)
+            {
+                TempData["message"] = ex.GetBaseException().Message;
+                throw;
             }
 
-            ViewBag.provinceCode = new SelectList(db.provinces, "provinceCode", "name", driver.provinceCode);
+            ViewBag.provinceCode = new SelectList(db.provinces.OrderBy(p => p.name), "provinceCode", "name", driver.provinceCode);
             return View(driver);
         }
 
@@ -73,7 +83,7 @@ namespace DEBusService.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.provinceCode = new SelectList(db.provinces, "provinceCode", "name", driver.provinceCode);
+            ViewBag.provinceCode = new SelectList(db.provinces.OrderBy(p => p.name), "provinceCode", "name", driver.provinceCode);
             return View(driver);
         }
 
@@ -84,13 +94,21 @@ namespace DEBusService.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "driverId,firstName,lastName,fullName,homePhone,workPhone,street,city,postalCode,provinceCode,dateHired")] driver driver)
         {
-            if (ModelState.IsValid)
+            try
             {
-                db.Entry(driver).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
+
+                if (ModelState.IsValid)
+                {
+                    db.Entry(driver).State = EntityState.Modified;
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
             }
-            ViewBag.provinceCode = new SelectList(db.provinces, "provinceCode", "name", driver.provinceCode);
+            catch (Exception ex)
+            {
+                TempData["message"] = ex.GetBaseException().Message;
+            }
+            ViewBag.provinceCode = new SelectList(db.provinces.OrderBy(p => p.name), "provinceCode", "name", driver.provinceCode);
             return View(driver);
         }
 
