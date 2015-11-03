@@ -1,10 +1,10 @@
 ﻿@model DEBusService.Models.driver
 
 @{
-    ViewBag.Title = "Details";
+    ViewBag.Title = "Details for " + Model.fullName;
 }
 
-<h2>Details</h2>
+<h2>@ViewBag.Title</h2>
 
 <div>
     <h4>driver</h4>

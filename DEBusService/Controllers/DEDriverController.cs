@@ -58,13 +58,13 @@ namespace DEBusService.Controllers
                     db.drivers.Add(driver);
                     driver.fullName = driver.lastName + ", " + driver.firstName;
                     db.SaveChanges();
+                    TempData["message"] = "Successfully added new driver: " + driver.fullName;
                     return RedirectToAction("Index");
                 }
             }
             catch (Exception ex)
             {
-                TempData["message"] = ex.GetBaseException().Message;
-                throw;
+                ModelState.AddModelError("", ex.GetBaseException().Message);
             }
 
             ViewBag.provinceCode = new SelectList(db.provinces.OrderBy(p => p.name), "provinceCode", "name", driver.provinceCode);
@@ -96,17 +96,18 @@ namespace DEBusService.Controllers
         {
             try
             {
-
                 if (ModelState.IsValid)
                 {
+                    driver.fullName = driver.lastName + ", " + driver.firstName;
                     db.Entry(driver).State = EntityState.Modified;
                     db.SaveChanges();
+                    TempData["message"] = "Successfully edited driver: " + driver.fullName;
                     return RedirectToAction("Index");
                 }
             }
             catch (Exception ex)
             {
-                TempData["message"] = ex.GetBaseException().Message;
+                ModelState.AddModelError("", ex.GetBaseException().Message);
             }
             ViewBag.provinceCode = new SelectList(db.provinces.OrderBy(p => p.name), "provinceCode", "name", driver.provinceCode);
             return View(driver);
@@ -132,10 +133,18 @@ namespace DEBusService.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            driver driver = db.drivers.Find(id);
-            db.drivers.Remove(driver);
-            db.SaveChanges();
-            return RedirectToAction("Index");
+            try
+            {
+                driver driver = db.drivers.Find(id);
+                db.drivers.Remove(driver);
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            catch (Exception ex)
+            {
+                TempData["message"] = ex.GetBaseException().Message;
+            }
+            return Delete(id);
         }
 
         protected override void Dispose(bool disposing)

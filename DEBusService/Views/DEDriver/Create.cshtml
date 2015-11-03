@@ -1,7 +1,7 @@
 ﻿@model DEBusService.Models.driver
 
 @{
-    ViewBag.Title = "Create";
+    ViewBag.Title = "Create Driver Record";
 }
 
 <h2>Create</h2>
@@ -13,7 +13,7 @@
     <div class="form-horizontal">
         <h4>driver</h4>
         <hr />
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.ValidationSummary(false, "", new { @class = "text-danger" })
         <div class="form-group">
             @Html.LabelFor(model => model.firstName, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
