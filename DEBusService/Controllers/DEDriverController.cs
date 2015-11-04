@@ -10,11 +10,17 @@ using DEBusService.Models;
 
 namespace DEBusService.Controllers
 {
+    /// <summary>
+    /// A class to create, read, update and delete a driver record
+    /// </summary>
     public class DEDriverController : Controller
     {
         private BusServiceContext db = new BusServiceContext();
 
-        // GET: DEDriver
+        /// <summary>
+        /// Shows a list of all drivers to the user
+        /// </summary>
+        /// <returns>A list of driver records</returns>
         public ActionResult Index()
         {
             var drivers = db.drivers.Include(d => d.province)
@@ -22,7 +28,11 @@ namespace DEBusService.Controllers
             return View(drivers.ToList());
         }
 
-        // GET: DEDriver/Details/5
+        /// <summary>
+        /// Shows the details of a selected driver record
+        /// </summary>
+        /// <param name="id">The id of the selected driver</param>
+        /// <returns>Details about the selected driver</returns>
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -37,16 +47,21 @@ namespace DEBusService.Controllers
             return View(driver);
         }
 
-        // GET: DEDriver/Create
+        /// <summary>
+        /// Allows the user to create a new driver
+        /// </summary>
+        /// <returns>The form for creating a new driver record</returns>
         public ActionResult Create()
         {
             ViewBag.provinceCode = new SelectList(db.provinces.OrderBy(p => p.name), "provinceCode", "name");
             return View();
         }
 
-        // POST: DEDriver/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        /// <summary>
+        /// Creates a new driver record based on the submitted information
+        /// </summary>
+        /// <param name="driver">The newly created driver object</param>
+        /// <returns>A redirect to the index action, including the newly created driver</returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "driverId,firstName,lastName,homePhone,workPhone,street,city,postalCode,provinceCode,dateHired")] driver driver)
@@ -70,8 +85,11 @@ namespace DEBusService.Controllers
             ViewBag.provinceCode = new SelectList(db.provinces.OrderBy(p => p.name), "provinceCode", "name", driver.provinceCode);
             return View(driver);
         }
-
-        // GET: DEDriver/Edit/5
+        /// <summary>
+        /// Allows the user to edit a specified driver record
+        /// </summary>
+        /// <param name="id">The id of the driver to edit</param>
+        /// <returns>Ther form for editing the selected driver record</returns>
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -87,9 +105,11 @@ namespace DEBusService.Controllers
             return View(driver);
         }
 
-        // POST: DEDriver/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        /// <summary>
+        /// Validates and saves the edited driver record
+        /// </summary>
+        /// <param name="driver">The newly edited driver record</param>
+        /// <returns>A redirect to the index action, including the newly edited driver record</returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "driverId,firstName,lastName,fullName,homePhone,workPhone,street,city,postalCode,provinceCode,dateHired")] driver driver)
@@ -113,7 +133,11 @@ namespace DEBusService.Controllers
             return View(driver);
         }
 
-        // GET: DEDriver/Delete/5
+        /// <summary>
+        /// Allows the user to delete a specified driver record
+        /// </summary>
+        /// <param name="id">The id of the seleced driver</param>
+        /// <returns>A confirmation message for deleting the driver</returns>
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -128,7 +152,11 @@ namespace DEBusService.Controllers
             return View(driver);
         }
 
-        // POST: DEDriver/Delete/5
+        /// <summary>
+        /// Deletes the selected record
+        /// </summary>
+        /// <param name="id">The id of the record to delete</param>
+        /// <returns>A redirect to the list of drivers, minus the deleted record</returns>
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
@@ -146,7 +174,10 @@ namespace DEBusService.Controllers
             }
             return Delete(id);
         }
-
+        /// <summary>
+        /// Cleans up memory resources and connections for this session
+        /// </summary>
+        /// <param name="disposing">Event handler for disposing of memory</param>
         protected override void Dispose(bool disposing)
         {
             if (disposing)
