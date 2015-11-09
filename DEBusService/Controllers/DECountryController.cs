@@ -10,6 +10,9 @@ using DEBusService.Models;
 
 namespace DEBusService.Controllers
 {
+    /// <summary>
+    /// A class to create, read, update and delete countries
+    /// </summary>
     public class DECountryController : Controller
     {
         private BusServiceContext db = new BusServiceContext();

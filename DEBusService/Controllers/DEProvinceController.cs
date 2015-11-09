@@ -10,6 +10,9 @@ using DEBusService.Models;
 
 namespace DEBusService.Controllers
 {
+    /// <summary>
+    /// A class to create, read, update and delete provinces
+    /// </summary>
     public class DEProvinceController : Controller
     {
         private BusServiceContext db = new BusServiceContext();

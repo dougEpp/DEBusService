@@ -166,6 +166,7 @@ namespace DEBusService.Controllers
                 driver driver = db.drivers.Find(id);
                 db.drivers.Remove(driver);
                 db.SaveChanges();
+                TempData["message"] = "Successfully deleted driver " + driver.fullName;
                 return RedirectToAction("Index");
             }
             catch (Exception ex)
